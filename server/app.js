@@ -26,11 +26,16 @@ const app = express();
 app.use(express.json());
 
 const { Pool } = require('pg')
-const pool = new Pool({
-    host: 'localhost',
-    database : 'eventonica'
-
-});
+// const pool = new Pool({
+//     host: 'localhost',
+//     database : 'eventonica'
+// });
+ const pool =new Pool({
+    // Make sure you swap out <user> and <password>
+    connectionString: process.env.DATABASE_URL || 'postgres://localhost:5432/eventonica',
+    // Use SSL but only in production
+    ssl: process.env.NODE_ENV === 'production'
+  });
 
 app.get('/events',async (req,res) => {
     const client = await pool.connect();
